@@ -10,18 +10,8 @@ version = "0.1-SNAPSHOT"
 repositories {
     mavenCentral()
 }
-kotlin {
-    sourceSets {
-        val main by getting {
-
-            dependencies {
-                implementation("io.ktor:ktor-kotlinMultiplatform:1.5.1")
-            }
-        }
-    }
-    sourceSets["main"].apply {
-        kotlin.srcDir("src/main/kotlin/")
-    }
+dependencies {
+    implementation(kotlin("stdlib"))
 }
 
 tasks.withType<KotlinCompile>() {
