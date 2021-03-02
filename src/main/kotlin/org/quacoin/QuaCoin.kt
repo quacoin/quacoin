@@ -1,3 +1,5 @@
+package org.quacoin
+
 import java.security.MessageDigest
 import java.util.*
 
@@ -5,7 +7,7 @@ fun main() {
     val bc = Blockchain() of Address(Date().toString().sha256())
 //    println(bc.chain[0])
     println(bc)
-//    bc.newTransaction(PendingTransaction() from Address("0") to bc.holder amount 100.0)
+//    bc.newTransaction(org.quacoin.PendingTransaction() from org.quacoin.Address("0") to bc.holder amount 100.0)
     println("Mining 5 blocks")
     bc.mine(5)
     println(bc)
@@ -42,7 +44,7 @@ class Blockchain(genesis: Block = generateGenesis()) {
     }
 
     override fun toString(): String {
-        return "Blockchain(chain=$chain, transactions=$transactions, holder=$holder)"
+        return "org.quacoin.Blockchain(chain=$chain, transactions=$transactions, holder=$holder)"
     }
 
     fun newTransaction(t: Transaction) {
@@ -134,11 +136,11 @@ data class Block(
     fun hash(): String = "$id:$timestamp:$transactions:$previousHash:$proof:$difficulty".sha256()
     fun generateProof(): Number {
         var guess: Int = 0
-//        println("$id:$timestamp:$transactions:$previousHash:$guess:$difficulty".sha256().substring(63 - difficulty..63))
+//        println("$id:$timestamp:$transactions:$previousHash:$guess:$difficulty".org.quacoin.sha256().substring(63 - difficulty..63))
         while (!validProof(guess)) {
             guess += 1
 //            println(
-//                "$id:$timestamp:$transactions:$previousHash:$guess:$difficulty".sha256().substring(63 - difficulty..63)
+//                "$id:$timestamp:$transactions:$previousHash:$guess:$difficulty".org.quacoin.sha256().substring(63 - difficulty..63)
 //            )
         }
         return guess
@@ -179,7 +181,7 @@ class PendingTransaction() {
     }
 
     override fun toString(): String {
-        return "PendingTransaction(from=$from, to=$to, amount=$amount)"
+        return "org.quacoin.PendingTransaction(from=$from, to=$to, amount=$amount)"
     }
 
 }
