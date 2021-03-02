@@ -36,8 +36,8 @@ class Blockchain(genesis: Block = generateGenesis()) {
         var balance = 0.0
         chain.forEach {
             it.transactions.forEach {
-                if (it.from == address) balance -= it.amount as Double
-                else if (it.to == address) balance += it.amount as Double
+                if (it.from == address) balance -= it.amount
+                else if (it.to == address) balance += it.amount
             }
         }
         return balance
@@ -47,16 +47,17 @@ class Blockchain(genesis: Block = generateGenesis()) {
         return "org.quacoin.Blockchain(chain=$chain, transactions=$transactions, holder=$holder)"
     }
 
-    fun newTransaction(t: Transaction) {
+    fun newTransaction(t: Transaction): Transaction {
         transactions.add(t)
+        return t
     }
 
-    fun newTransaction(pendingT: PendingTransaction) {
-        newTransaction(pendingT.final())
+    fun newTransaction(pendingT: PendingTransaction): Transaction {
+        return newTransaction(pendingT.final())
     }
 
-    fun newTransaction(from: Address, to: Address, amount: Double) {
-        newTransaction(Transaction(from, to, amount))
+    fun newTransaction(from: Address, to: Address, amount: Double): Transaction {
+        return newTransaction(Transaction(from, to, amount))
     }
 
     fun mine(): Boolean {
@@ -67,11 +68,11 @@ class Blockchain(genesis: Block = generateGenesis()) {
                 proof = 0,
                 previousHash = "",
                 hash = "",
-                difficulty = if (chain.count() / 1000 > 1) chain.count() / 1000 else 1
+                difficulty = chain.count() / 1000 + 1
             )
             chain.add(block)
             transactions.clear()
-            newTransaction(PendingTransaction() from Address("0") to holder amount block.difficulty * 0.1)
+            newTransaction(PendingTransaction() from Address("0") to holder amount block.difficulty * 0.01)
             println("debug: balance: ${balance()}")
             println("debug: difficulty: ${block.difficulty}")
 
