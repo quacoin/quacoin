@@ -1,2 +1,2 @@
-# quacoin
+# Quacoin
 Quality Coin
