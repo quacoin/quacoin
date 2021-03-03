@@ -21,6 +21,7 @@ class Blockchain(genesis: Block = generateGenesis()) {
 
     init {
         chain.add(genesis)
+        mine(5)
     }
 
     infix fun of(address: Address): Blockchain {
@@ -44,7 +45,7 @@ class Blockchain(genesis: Block = generateGenesis()) {
     }
 
     override fun toString(): String {
-        return "org.quacoin.Blockchain(chain=$chain, transactions=$transactions, holder=$holder)"
+        return "Blockchain(chain=$chain, transactions=$transactions, holder=$holder)"
     }
 
     fun newTransaction(t: Transaction): Transaction {
@@ -66,8 +67,7 @@ class Blockchain(genesis: Block = generateGenesis()) {
                 id = chain.count(),
                 transactions = transactions,
                 proof = 0,
-                previousHash = "",
-                hash = "",
+                previousHash = chain[chain.count()-1].hash,
                 difficulty = chain.count() / 1000 + 1
             )
             chain.add(block)
@@ -114,7 +114,6 @@ fun generateGenesis(): Block {
         transactions = mutableListOf(),
         proof = 0,
         previousHash = "",
-        hash = "",
         difficulty = 1
     )
     return genesis
@@ -125,7 +124,7 @@ data class Block(
     var timestamp: Date = Date(),
     var proof: Number,
     val transactions: MutableList<Transaction>,
-    var hash: String,
+    var hash: String = "",
     var previousHash: String,
     val difficulty: Int
 ) {
@@ -182,7 +181,7 @@ class PendingTransaction() {
     }
 
     override fun toString(): String {
-        return "org.quacoin.PendingTransaction(from=$from, to=$to, amount=$amount)"
+        return "PendingTransaction(from=$from, to=$to, amount=$amount)"
     }
 
 }

@@ -1,7 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+//val compileKotlin: KotlinCompile by tasks
+//compileKotlin.kotlinOptions.useIR = true
 plugins {
-    kotlin("jvm") version "1.4.21"
+    kotlin("jvm") version "1.4.30"
 }
 
 group = "com.kraskaska"
@@ -12,7 +14,6 @@ repositories {
 }
 val ktor_version = "1.5.2"
 dependencies {
-//    implementation(kotlin("stdlib"))
     implementation(kotlin("stdlib"))
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")

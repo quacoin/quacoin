@@ -6,7 +6,6 @@ import io.ktor.mustache.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.netty.*
-import kotlinx.coroutines.async
 import java.io.File
 import java.util.*
 
@@ -16,7 +15,7 @@ fun main(args: Array<String>) = EngineMain.main(args)
 class ResourceLoader {
     companion object {
         fun resourceAsFile(path: String): File {
-            return File(javaClass.classLoader.getResource(path).file)
+            return File(ResourceLoader::class.java.classLoader.getResource(path)!!.file)
         }
     }
 }
@@ -45,16 +44,18 @@ fun Application.module(testing: Boolean = true) {
                 )
                 return@get
             }
-            async {
-                bc.mine(call.request.queryParameters["blocks"]!!.toInt())
-            }
+            bc.mine(call.request.queryParameters["blocks"]!!.toInt())
             call.respond(MustacheContent("mine_proceed.hbs", mapOf("blocks" to call.request.queryParameters["blocks"])))
         }
         get("/transfer") {
             call.respond(MustacheContent("transfer.hbs", mapOf<Unit, Unit>()))
         }
         get("/transfer/proceed") {
-            val t = bc.newTransaction(Transaction(bc.holder, Address(call.request.queryParameters["address"]!!), call.request.queryParameters["amount"]!!.toDouble()))
+            val t = bc.newTransaction(
+                bc.holder,
+                Address(call.request.queryParameters["address"]!!),
+                call.request.queryParameters["amount"]!!.toDouble()
+            )
             call.respond(MustacheContent("transfer_proceed.hbs", mapOf("transfer" to t)))
         }
         get("/stat/chain") {
