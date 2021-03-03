@@ -1,13 +1,14 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-//val compileKotlin: KotlinCompile by tasks
-//compileKotlin.kotlinOptions.useIR = true
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.kotlinOptions.useIR = true
 plugins {
     kotlin("jvm") version "1.4.30"
+    kotlin("plugin.serialization") version "1.4.30"
 }
 
 group = "com.kraskaska"
-version = "0.1-SNAPSHOT"
+version = "0.2-SAVING"
 
 repositories {
     mavenCentral()
@@ -19,6 +20,8 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("io.ktor:ktor-mustache:$ktor_version")
     implementation("ch.qos.logback:logback-classic:1.2.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.1.0")
+    implementation("com.charleskorn.kaml:kaml:0.28.3")
 }
 kotlin {
     sourceSets["main"].apply {

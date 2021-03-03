@@ -1,5 +1,6 @@
 package org.quacoin
 
+import kotlinx.serialization.Serializable
 import java.security.MessageDigest
 import java.util.*
 
@@ -14,14 +15,15 @@ fun main() {
     println(bc.balance())
 }
 
-class Blockchain(genesis: Block = generateGenesis()) {
+@Serializable
+class Blockchain() {
     val chain = mutableListOf<Block>()
     val transactions = mutableListOf<Transaction>()
     var holder: Address = Address("")
 
     init {
+        val genesis: Block = generateGenesis()
         chain.add(genesis)
-        mine(5)
     }
 
     infix fun of(address: Address): Blockchain {
@@ -119,10 +121,11 @@ fun generateGenesis(): Block {
     return genesis
 }
 
+@Serializable
 data class Block(
-    var id: Number,
-    var timestamp: Date = Date(),
-    var proof: Number,
+    var id: Int,
+    var timestamp: Long = Date().time,
+    var proof: Int,
     val transactions: MutableList<Transaction>,
     var hash: String = "",
     var previousHash: String,
@@ -134,8 +137,8 @@ data class Block(
         this.hash = this.hash()
     }
     fun hash(): String = "$id:$timestamp:$transactions:$previousHash:$proof:$difficulty".sha256()
-    fun generateProof(): Number {
-        var guess: Int = 0
+    fun generateProof(): Int {
+        var guess = 0
 //        println("$id:$timestamp:$transactions:$previousHash:$guess:$difficulty".org.quacoin.sha256().substring(63 - difficulty..63))
         while (!validProof(guess)) {
             guess += 1
@@ -155,6 +158,7 @@ private infix fun String.times(i: Int): String {
     return this.repeat(i)
 }
 
+@Serializable
 data class Transaction(val from: Address, val to: Address, val amount: Double)
 
 class PendingTransaction() {
@@ -186,9 +190,8 @@ class PendingTransaction() {
 
 }
 
-data class Address(val address: String) {
-    fun none(): Address = Address("")
-}
+@Serializable
+data class Address(val address: String)
 
 fun String.sha256() = this.hash("SHA-256")
 fun String.hash(algorithm: String): String {

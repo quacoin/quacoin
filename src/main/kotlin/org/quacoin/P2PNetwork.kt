@@ -9,9 +9,26 @@ import io.ktor.server.netty.*
 import java.io.File
 import java.util.*
 
-val bc = Blockchain() of Address(Date().toString().sha256())
+val bc = importBlockchain()
 
-fun main(args: Array<String>) = EngineMain.main(args)
+fun importBlockchain(): Blockchain {
+    return try {
+        QuaSave("quasave.yml").read()
+    } catch (e: Exception) {
+        Blockchain() of Address("${Date()}".sha256())
+    }
+}
+
+fun main(args: Array<String>) { shutdownHook(); EngineMain.main(args) }
+
+fun shutdownHook() {
+    Runtime.getRuntime().addShutdownHook(Thread {
+        run {
+            QuaSave("quasave.yml", QuaSave.QuaSaveMode.Write, bc).write()
+        }
+    })
+}
+
 class ResourceLoader {
     companion object {
         fun resourceAsFile(path: String): File {
