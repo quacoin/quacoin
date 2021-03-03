@@ -29,7 +29,11 @@ kotlin {
         resources.srcDir("src/main/resources")
     }
 }
-
-tasks.withType<KotlinCompile>() {
+tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
+}
+tasks.withType<org.gradle.jvm.tasks.Jar> {
+    manifest {
+        attributes["Main-Class"] = "org.quacoin.P2PNetworkKt"
+    }
 }
