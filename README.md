@@ -1,4 +1,4 @@
-# Quacoin
+# Quacoin ![](https://img.shields.io/github/stars/quacoin/quacoin?style=flat)
 Quality Coin
 
 Written in Kotlin, licensed under GPLv3
