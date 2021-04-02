@@ -66,16 +66,16 @@ class Blockchain() {
     fun mine(): Boolean {
         try {
             val difficulty = chain.count() / 1000 + 1
+            newTransaction(PendingTransaction() from "0" to holder amount 0.01 * difficulty)
             val block = Block(
                 id = chain.count(),
-                transactions = (transactions + Transaction(Address("0"), holder, 0.01 * difficulty)) as MutableList<Transaction>,
+                transactions = transactions,
                 proof = 0,
                 previousHash = chain[chain.count()-1].hash,
                 difficulty = difficulty
             )
             chain.add(block)
             transactions.clear()
-
 //            println("debug: balance: ${balance()}")
 //            println("debug: difficulty: ${block.difficulty}")
 
@@ -84,10 +84,12 @@ class Blockchain() {
             return false
         }
     }
-    fun mine(num: Int) {
+    fun mine(num: Int): Boolean {
+        var result = true
         for (i in 0 until num) {
-            mine()
+            result = result && mine()
         }
+        return result
     }
     fun clone(): Blockchain {
         val self = this
@@ -161,10 +163,16 @@ class PendingTransaction() {
         this.from = a
         return this
     }
+    infix fun from(a: String): PendingTransaction {
+        return from(Address(a))
+    }
 
     infix fun to(a: Address): PendingTransaction {
         this.to = a
         return this
+    }
+    infix fun to(a: String): PendingTransaction {
+        return to(Address(a))
     }
 
     infix fun amount(amount: Double): PendingTransaction {

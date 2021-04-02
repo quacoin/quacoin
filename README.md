@@ -10,7 +10,7 @@ Written in Kotlin, licensed under GPLv3
  2. Compile & run [src/main/kotlin/org/quacoin/P2PNetwork.kt](src/main/kotlin/org/quacoin/P2PNetwork.kt)
  3. Open in browser [`localhost:4657`](http://localhost:4657)
 
-Probably you will have Quacoin working, but it isn't stable enough! I plan to shift from `ktor` and use something more best fitting (like TornadoFX). Also there is issues like very strange amount of cryptocurrency. You should probably wait until proper release (i want it to be)
+There might be different issues with current client implementation through ktor and i'm plannig to change client to TornadoFX. You should probably wait until proper release (i want it to be)
 
-## Help
+## Help us
 Help Quacoin evolve by commiting issues and sending pull requests!
