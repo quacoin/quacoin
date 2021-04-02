@@ -15,6 +15,7 @@ repositories {
 }
 val ktor_version = "1.5.2"
 dependencies {
+    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation(kotlin("stdlib"))
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-netty:$ktor_version")
@@ -22,6 +23,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.1.0")
     implementation("com.charleskorn.kaml:kaml:0.28.3")
+    implementation("org.snakeyaml", "snakeyaml-engine", "2.2.1")
 }
 kotlin {
     sourceSets["main"].apply {
@@ -35,5 +37,8 @@ tasks.withType<KotlinCompile> {
 tasks.withType<org.gradle.jvm.tasks.Jar> {
     manifest {
         attributes["Main-Class"] = "org.quacoin.P2PNetworkKt"
+    }
+    configurations["compileClasspath"].forEach { file: File ->
+        from(zipTree(file.absoluteFile))
     }
 }

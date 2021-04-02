@@ -2,11 +2,11 @@ package org.quacoin
 
 import com.github.mustachejava.DefaultMustacheFactory
 import io.ktor.application.*
+import io.ktor.http.*
 import io.ktor.mustache.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.netty.*
-import java.io.File
 import java.util.*
 
 val bc = importBlockchain()
@@ -29,14 +29,6 @@ fun shutdownHook() {
     })
 }
 
-class ResourceLoader {
-    companion object {
-        fun resourceAsFile(path: String): File {
-            return File(ResourceLoader::class.java.classLoader.getResource(path)!!.file)
-        }
-    }
-}
-
 fun Application.module(testing: Boolean = true) {
     install(Mustache) {
         mustacheFactory = DefaultMustacheFactory("templates")
@@ -46,7 +38,7 @@ fun Application.module(testing: Boolean = true) {
             call.respond(MustacheContent("index.hbs", mapOf("holder" to bc.holder, "balance" to bc.balance())))
         }
         get("/styles") {
-            call.respondFile(ResourceLoader.resourceAsFile("templates/style.css"))
+            call.respond(MustacheContent("style.css", mapOf<Unit, Unit>(), contentType = ContentType.Text.CSS))
         }
         get("/mine") {
             call.respond(MustacheContent("mine.hbs", mapOf<Unit, Unit>()))

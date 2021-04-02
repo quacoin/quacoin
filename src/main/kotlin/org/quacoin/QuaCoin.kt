@@ -65,18 +65,19 @@ class Blockchain() {
 
     fun mine(): Boolean {
         try {
+            val difficulty = chain.count() / 1000 + 1
             val block = Block(
                 id = chain.count(),
-                transactions = transactions,
+                transactions = (transactions + Transaction(Address("0"), holder, 0.01 * difficulty)) as MutableList<Transaction>,
                 proof = 0,
                 previousHash = chain[chain.count()-1].hash,
-                difficulty = chain.count() / 1000 + 1
+                difficulty = difficulty
             )
             chain.add(block)
             transactions.clear()
-            newTransaction(PendingTransaction() from Address("0") to holder amount block.difficulty * 0.01)
-            println("debug: balance: ${balance()}")
-            println("debug: difficulty: ${block.difficulty}")
+
+//            println("debug: balance: ${balance()}")
+//            println("debug: difficulty: ${block.difficulty}")
 
             return true
         } catch (e: Exception){
@@ -87,15 +88,6 @@ class Blockchain() {
         for (i in 0 until num) {
             mine()
         }
-    }
-    fun import(bc: Blockchain) {
-        this.transactions.clear()
-        this.transactions.addAll(bc.transactions)
-        this.chain.clear()
-        this.chain.addAll(bc.chain)
-    }
-    fun export(): Blockchain {
-        return this.clone()
     }
     fun clone(): Blockchain {
         val self = this
