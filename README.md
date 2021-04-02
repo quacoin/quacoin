@@ -1,4 +1,4 @@
-# Quacoin
+# Quacoin ![](https://img.shields.io/github/stars/quacoin/quacoin?style=flat) ![](https://img.shields.io/badge/release-alpha-critical)
 Quality Coin
 
 Written in Kotlin, licensed under GPLv3
@@ -10,4 +10,7 @@ Written in Kotlin, licensed under GPLv3
  2. Compile & run [src/main/kotlin/org/quacoin/P2PNetwork.kt](src/main/kotlin/org/quacoin/P2PNetwork.kt)
  3. Open in browser [`localhost:4657`](http://localhost:4657)
 
-Nothing will be saved, work in progress.
+Probably you will have Quacoin working, but it isn't stable enough! I plan to shift from `ktor` and use something more best fitting (like TornadoFX). Also there is issues like very strange amount of cryptocurrency. You should probably wait until proper release (i want it to be)
+
+## Help
+Help Quacoin evolve by commiting issues and sending pull requests!
