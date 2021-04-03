@@ -7,10 +7,8 @@ Written in Kotlin, licensed under GPLv3
 ## How to launch QuaCoin Node
 *Work in progress*
  1. Download source code
- 2. Compile & run [src/main/kotlin/org/quacoin/P2PNetwork.kt](src/main/kotlin/org/quacoin/P2PNetwork.kt)
- 3. Open in browser [`localhost:4657`](http://localhost:4657)
+ 2. Compile & run [Tayfun client](src/main/kotlin/org/quacoin/tayfun/Client.kt)
 
-There might be different issues with current client implementation through ktor and i'm plannig to change client to TornadoFX. You should probably wait until proper release (i want it to be)
-
+In near future there will be executable jar files with Tayfun GUI
 ## Help us
 Help Quacoin evolve by commiting issues and sending pull requests!
