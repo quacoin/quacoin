@@ -9,6 +9,9 @@ import org.quacoin.*
 import tornadofx.*
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.util.*
 fun isAddress(string: String): Boolean {
     return string.all { it in '0'..'9' || it in 'a'..'f' }
@@ -20,14 +23,16 @@ class Chain {
 
         fun importBlockchain(): Blockchain {
             return try {
-                QuaSave("quasave.yml").read()
+                QuaSave(System.getProperty("user.home")+"/.quacoin/quasave.yml").read()
             } catch (e: Exception) {
                 println(e)
                 Blockchain() of Address("${Date()}".sha256())
             }
         }
         fun shutdownHook() {
-            QuaSave("quasave.yml", QuaSave.QuaSaveMode.Write, blockchain).write()
+            if(!Files.exists(Paths.get(System.getProperty("user.home")+"/.quacoin"))) File(System.getProperty("user.home")+"/.quacoin").mkdir()
+            println(System.getProperty("user.home")+"/.quacoin/quasave.yml")
+            QuaSave(System.getProperty("user.home")+"/.quacoin/quasave.yml", QuaSave.QuaSaveMode.Write, blockchain).write()
         }
     }
 }

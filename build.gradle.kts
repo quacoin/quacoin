@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.kraskaska"
-version = "0.2-SAVING"
+version = "0.3-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -37,7 +37,7 @@ tasks.withType<KotlinCompile> {
 }
 tasks.withType<org.gradle.jvm.tasks.Jar> {
     manifest {
-        attributes["Main-Class"] = "org.quacoin.P2PNetworkKt"
+        attributes["Main-Class"] = "org.quacoin.tayfun.ClientKt"
     }
     configurations["compileClasspath"].forEach { file: File ->
         from(zipTree(file.absoluteFile))
