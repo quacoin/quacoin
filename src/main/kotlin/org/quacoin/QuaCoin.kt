@@ -1,9 +1,12 @@
 package org.quacoin
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.security.MessageDigest
 import java.util.*
 
+
+typealias EventCallback = (Map<String, Any>) -> Unit
 fun main() {
     val bc = Blockchain() of Address(Date().toString().sha256())
 //    println(bc.chain[0])
@@ -21,6 +24,21 @@ class Blockchain() {
     val transactions = mutableListOf<Transaction>()
     var holder: Address = Address("")
 
+    @Transient
+    val callbacks = mutableMapOf<String,  MutableList<EventCallback>>()
+    @Transient
+    val perDifficultyReward: Double = 0.000001
+
+    private fun performCallbacks(callbackType: String, data: Map<String, Any>) {
+        if(callbacks[callbackType] == null) callbacks[callbackType] = mutableListOf()
+        callbacks[callbackType]!!.forEach {
+            it.invoke(data)
+        }
+    }
+    fun registerCallback(callbackType: String, callback: EventCallback){
+        if(callbacks[callbackType] == null) callbacks[callbackType] = mutableListOf()
+        callbacks[callbackType]!!.add(callback)
+    }
     init {
         val genesis: Block = generateGenesis()
         chain.add(genesis)
@@ -52,6 +70,7 @@ class Blockchain() {
 
     fun newTransaction(t: Transaction): Transaction {
         transactions.add(t)
+        performCallbacks("newTransaction", mapOf("transaction" to t))
         return t
     }
 
@@ -66,7 +85,9 @@ class Blockchain() {
     fun mine(): Boolean {
         try {
             val difficulty = chain.count() / 1000 + 1
-            newTransaction(PendingTransaction() from "0" to holder amount 0.01 * difficulty)
+            newTransaction(PendingTransaction() from "0" to holder amount perDifficultyReward * difficulty)
+            val transactions = mutableListOf<Transaction>()
+            transactions.addAll(this.transactions)
             val block = Block(
                 id = chain.count(),
                 transactions = transactions,
@@ -75,7 +96,8 @@ class Blockchain() {
                 difficulty = difficulty
             )
             chain.add(block)
-            transactions.clear()
+            this.transactions.clear()
+            performCallbacks("newBlock", mapOf("block" to block))
 //            println("debug: balance: ${balance()}")
 //            println("debug: difficulty: ${block.difficulty}")
 
@@ -91,17 +113,17 @@ class Blockchain() {
         }
         return result
     }
-    fun clone(): Blockchain {
-        val self = this
-        val bc = Blockchain() of Address("")
-        with(bc) {
-            this.transactions.clear()
-            this.transactions.addAll(self.transactions)
-            this.chain.clear()
-            this.chain.addAll(self.chain)
-        }
-        return bc
-    }
+//    fun clone(): Blockchain {
+//        val self = this
+//        val bc = Blockchain() of Address("")
+//        with(bc) {
+//            this.transactions.clear()
+//            this.transactions.addAll(self.transactions)
+//            this.chain.clear()
+//            this.chain.addAll(self.chain)
+//        }
+//        return bc
+//    }
 }
 
 fun generateGenesis(): Block {

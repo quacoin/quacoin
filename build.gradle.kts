@@ -24,6 +24,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.1.0")
     implementation("com.charleskorn.kaml:kaml:0.28.3")
     implementation("org.snakeyaml", "snakeyaml-engine", "2.2.1")
+    implementation("no.tornado:tornadofx:1.7.20")
 }
 kotlin {
     sourceSets["main"].apply {
